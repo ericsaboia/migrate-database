@@ -91,8 +91,8 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 
 ## Release History
 
-0.0.1 / 2014-12-22
-==================
+0.1.0 / 2014-12-22
+_____________
  * Used grunt for the CLI
  * Used timestamp for migrations name
  * Fixed error handler
