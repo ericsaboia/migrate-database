@@ -1,118 +1,108 @@
+# grunt-migrate
 
-# migrate
+A grunt task for database migration in Node.JS
+It has started as a fork of [node-migrate](https://github.com/tj/node-migrate), but has rebuilt from almost zero, and it's heavily inspired on Rails migrations style. 
 
-  Abstract migration framework for node
+# Why grunt-migrate?
+1. Because the [currently most popular node migrate library](https://github.com/tj/node-migrate) was forgot in time, with many opened, and unsolved, [issues](https://github.com/tj/node-migrate/issues), since TJ is no longer envolved with node.js modules. 
+2. It uses grunt for this CLI, which is far better than inject bins inside npm node modules.
+3. It uses your database to store migrate histories, avoiding a bunch of possible issues
+4. It uses timestamp in migration's name, good bye merges pain.
+5. It was designed to plug any database through adapters.
 
-## Installation
+## Getting Started
+This plugin requires Grunt `~0.4.5`
 
-    $ npm install migrate
+If you haven't used [Grunt](http://gruntjs.com/) before, be sure to check out the [Getting Started](http://gruntjs.com/getting-started) guide, as it explains how to create a [Gruntfile](http://gruntjs.com/sample-gruntfile) as well as install and use Grunt plugins. Once you're familiar with that process, you may install this plugin with this command:
+
+```shell
+npm install grunt-migrate --save-dev
+```
+
+Once the plugin has been installed, it may be enabled inside your Gruntfile with this line of JavaScript:
+
+```js
+grunt.loadNpmTasks('grunt-migrate');
+```
+
+## The "migrate" task
+
+### Overview
+In your project's Gruntfile, add a section named `migrate` to the data object passed into `grunt.initConfig()`.
+
+```js
+grunt.initConfig({
+  migrate: {
+    path: 'migrations/',
+    adapter: 'MongoDB',
+    db: {
+      host: '127.0.0.1',
+      port: 27017,
+      database: 'migrate',
+      collection: 'schema_migrations'
+    }
+  }
+});
+```
 
 ## Usage
 
-```
-Usage: migrate [options] [command]
+### Creating migrations
+Creates a new migration inside the migrate.path destination
 
-Options:
-
-   -c, --chdir <path>   change the working directory
-
-Commands:
-
-   down             migrate down
-   up               migrate up (the default command)
-   create [title]   create a new migration file with optional [title]
-
+```shell
+$ grunt migrate:create --name migrations_name
 ```
 
-## Creating Migrations
+The created migration will contain the following template structure:
 
-To create a migration, execute `migrate create` with an optional title. `node-migrate` will create a node module within `./migrations/` which contains the following two exports:
+```js
+exports.up = function (next) {
+  next(new Error('Not implemented'));
+};
 
-    exports.up = function(next){
-      next();
-    };
+exports.down = function (next) {
+  next(new Error('Not implemented'));
+};
+```
 
-    exports.down = function(next){
-      next();
-    };
+### Running migrations up
+Runs all the pending migrations. 
+You can pass --steps argument to limit the number of migrations to run.
+fe
+```shell
+$ grunt migrate:up
+```
 
-All you have to do is populate these, invoking `next()` when complete, and you are ready to migrate!
+### Running migrations down
+Rollbacks the last migration
+You can pass --steps argument to limit the number of migrations to run.
 
-For example:
+```
+$ grunt migrate:down
+```
 
-    $ migrate create add-pets
-    $ migrate create add-owners
+## The library does not support my database!
+Fear nothing, It's pretty simple to implement a new adapter, just follow the [existing mongodb adapter](https://github.com/ericsaboia/grunt-migrate/blob/master/tasks/lib/adapters/mongodb.js) methods.
+Feel free to create a new adapter and pull-request it.
 
-The first call creates `./migrations/000-add-pets.js`, which we can populate:
+## Contributing
+In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
-      var db = require('./db');
+## Release History
 
-      exports.up = function(next){
-        db.rpush('pets', 'tobi');
-        db.rpush('pets', 'loki');
-        db.rpush('pets', 'jane', next);
-      };
-
-      exports.down = function(next){
-        db.rpop('pets');
-        db.rpop('pets', next);
-      };
-
-The second creates `./migrations/001-add-owners.js`, which we can populate:
-
-      var db = require('./db');
-
-      exports.up = function(next){
-        db.rpush('owners', 'taylor');
-        db.rpush('owners', 'tj', next);
-      };
-
-      exports.down = function(next){
-        db.rpop('owners');
-        db.rpop('owners', next);
-      };
-
-## Running Migrations
-
-When first running the migrations, all will be executed in sequence.
-
-      $ migrate
-      up : migrations/000-add-pets.js
-      up : migrations/001-add-jane.js
-      up : migrations/002-add-owners.js
-      up : migrations/003-coolest-pet.js
-      migration : complete
-
-Subsequent attempts will simply output "complete", as they have already been executed in this machine. `node-migrate` knows this because it stores the current state in `./migrations/.migrate` which is typically a file that SCMs like GIT should ignore.
-
-      $ migrate
-      migration : complete
-
-If we were to create another migration using `migrate create`, and then execute migrations again, we would execute only those not previously executed:
-
-      $ migrate
-      up : migrates/004-coolest-owner.js
-
-You can also run migrations incrementally by specifying a migration.
-
-      $ migrate up 002-coolest-pet.js
-      up : migrations/000-add-pets.js
-      up : migrations/001-add-jane.js
-      up : migrations/002-add-owners.js
-      migration : complete
-
-This will run up-migrations upto (and including) `002-coolest-pet.js`. Similarly you can run down-migrations upto (and including) a specific migration, instead of migrating all the way down.
-
-      $ migrate down 001-add-jane.js
-      down : migrations/002-add-owners.js
-      down : migrations/001-add-jane.js
-      migration : complete
+0.0.1 / 2014-12-22
+==================
+ * Used grunt for the CLI
+ * Used timestamp for migrations name
+ * Fixed error handler
+ * Cloned node-migrate
 
 ## License 
 
 (The MIT License)
 
-Copyright (c) 2011 TJ Holowaychuk &lt;tj@vision-media.ca&gt;
+Copyright (c) 2014 Eric Saboia esaboia@gmal.com
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
