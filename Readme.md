@@ -94,6 +94,7 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 0.1.0 / 2014-12-22
 _____________
  * Used grunt for the CLI
+ * Used database for store migrate histories
  * Used timestamp for migrations name
  * Fixed error handler
  * Cloned node-migrate
