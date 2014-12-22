@@ -8,10 +8,24 @@
 
 'use strict';
 
+var path = require('path');
+var _ = require('lodash');
 var Migrate = require('./lib/migrate');
 
+var defaultConfig = {
+  path: 'migrations/',
+  adapter: 'MongoDB',
+  db: {
+    host: '127.0.0.1',
+    port: 27017,
+    database: 'migrate',
+    collection: 'schema_migrations'
+  }
+};
+
 module.exports = function(grunt) {
-  var config = grunt.config.data.migrate;
+  var config = _.merge(defaultConfig, grunt.config.data.migrate);
+  var migrationsPath = path.resolve(config.path);
 
 	var Adapter = require('./lib/adapters/' + config.adapter);
 	var adapter = new Adapter(config.db);
@@ -20,17 +34,17 @@ module.exports = function(grunt) {
     if (!grunt.option('name'))
       throw new Error('--name required to create migration');
 
-    var migrate = new Migrate(grunt, adapter, config.path, grunt.option('steps'));
+    var migrate = new Migrate(grunt, adapter, migrationsPath, grunt.option('steps'));
     migrate.create(grunt.option('name'), this.async());
   });
 
   grunt.registerTask('migrate:up', 'executes all or limited new migrations\nUse --steps to control how many migrations would be executed', function(command) {
-    var migrate = new Migrate(grunt, adapter, config.path, grunt.option('steps'));
+    var migrate = new Migrate(grunt, adapter, migrationsPath, grunt.option('steps'));
     migrate.up(this.async());
   });
 
   grunt.registerTask('migrate:down', 'rollbacks one or more migrations\nUse --steps to control how many migrations would rollback', function(command) {  	
-    var migrate = new Migrate(grunt, adapter, config.path, grunt.option('steps') || 1);
+    var migrate = new Migrate(grunt, adapter, migrationsPath, grunt.option('steps') || 1);
     migrate.down(this.async());
   });
 

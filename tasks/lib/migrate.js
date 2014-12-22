@@ -12,7 +12,7 @@
 
 var fs = require('fs')
   , async = require('async')
-  , _ = require('underscore')
+  , _ = require('lodash')
 ;
 
 /**
@@ -47,9 +47,13 @@ function Migrate (grunt, adapter, path, steps) {
  */
 
 Migrate.prototype.create = function (name, callback) {
+  if (!fs.existsSync(this.path))
+    fs.mkdirSync(this.path);
+
   name = Date.now() + '_' + name + '.js';
-  fs.createReadStream('templates/migration.js')
-      .pipe(fs.createWriteStream(this.path + name))
+
+  fs.createReadStream(__dirname + '/../../templates/migration.js')
+      .pipe(fs.createWriteStream(this.path + '/' + name))
       .on('close', callback);
 
   this.grunt.log.writeln("Creating '%s'", name);
@@ -111,7 +115,7 @@ Migrate.prototype.migrate = function (direction) {
   return function (migrationName, callback) {
     that.grunt.log.writeln("Runing %s '%s' migration", direction, migrationName);
 
-    var migration = require('../../' + that.path + migrationName);
+    var migration = require(that.path + '/' + migrationName);
     migration[direction](function (err) {
       err? callback(err) : that.saveStateOf(migrationName, direction, callback);
     });
