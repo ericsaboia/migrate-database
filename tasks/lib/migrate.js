@@ -113,7 +113,7 @@ Migrate.prototype.migrate = function (direction) {
   var that = this;
 
   return function (migrationName, callback) {
-    that.grunt.log.writeln("Runing %s '%s' migration", direction, migrationName);
+    that.grunt.log.writeln("%s: %s", direction, migrationName);
 
     var migration = require(that.path + '/' + migrationName);
     migration[direction](function (err) {
