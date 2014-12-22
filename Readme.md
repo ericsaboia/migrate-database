@@ -4,10 +4,10 @@ A grunt task for database migration in Node.JS
 It has started as a fork of [node-migrate](https://github.com/tj/node-migrate), but has rebuilt from almost zero, and it's heavily inspired on Rails migrations style. 
 
 # Why grunt-migrate?
-1. Because the [currently most popular node migrate library](https://github.com/tj/node-migrate) was forgot in time, with many opened, and unsolved, [issues](https://github.com/tj/node-migrate/issues), since TJ is no longer envolved with node.js modules. 
-2. It uses grunt for this CLI, which is far better than inject bins inside npm node modules.
-3. It uses your database to store migrate histories, avoiding a bunch of possible issues
-4. It uses timestamp in migration's name, good bye merges pain.
+1. Because the [currently most popular node migrate library](https://github.com/tj/node-migrate) was forgot in time, with many [issues](https://github.com/tj/node-migrate/issues) opened and unsolved, since TJ is no longer envolved with node.js modules. 
+2. It uses grunt for the CLI, which is far better than inject bins inside npm node modules.
+3. It uses yours database to store migrate histories, avoiding a bunch of possible issues
+4. It uses timestamp in migration's name, good bye merge pain.
 5. It was designed to plug any database through adapters.
 
 ## Getting Started
@@ -68,8 +68,8 @@ exports.down = function (next) {
 
 ### Running migrations up
 Runs all the pending migrations. 
-You can pass --steps argument to limit the number of migrations to run.
-fe
+You can pass the --steps argument to limit the number of migrations to run.
+
 ```shell
 $ grunt migrate:up
 ```
