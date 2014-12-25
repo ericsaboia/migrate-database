@@ -13,6 +13,7 @@
 var fs = require('fs')
   , async = require('async')
   , _ = require('lodash')
+  , path = require('path')
 ;
 
 /**
@@ -31,10 +32,14 @@ module.exports = Migrate;
  * @api private
  */
 
-function Migrate (grunt, adapter, path, steps) {
+function Migrate (grunt, adapter, config, steps) {
+  // Load initializer
+  if (config.initializerPath)
+    require( path.resolve(config.initializerPath) );
+
   this.grunt = grunt;
   this.adapter = adapter;
-  this.path = path;
+  this.path = path.resolve(config.path);
   this.steps = steps;
 }
 
@@ -135,7 +140,6 @@ Migrate.prototype.saveStateOf = function (migration, direction, callback) {
   var method = (direction == 'up') ? 'insert' : 'remove';
   this.adapter[method](migration, callback);
 }
-
 
 function migrationsAt (path) {
   return fs.readdirSync(path).filter(function(file){
