@@ -1,7 +1,7 @@
 {
   "name": "migrate-database",
   "description": "A grunt task for database migration in Node.JS",
-  "version": "0.1.1",
+  "version": "0.1.5",
   "homepage": "https://github.com/ericsaboia/migrate-database",
   "author": {
     "name": "Eric Saboia",
