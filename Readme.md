@@ -1,7 +1,7 @@
 # grunt-migrate
 
 A grunt task for database migration in Node.JS
-It has started as a fork of [node-migrate](https://github.com/tj/node-migrate), but has rebuilt from almost zero, and it's heavily inspired on Rails migrations style. 
+It has started as a fork of [node-migrate](https://github.com/tj/node-migrate), but has rebuilt from scratch, and it's heavily inspired on Rails migrations style. 
 
 # Why grunt-migrate?
 1. Because the [currently most popular node migrate library](https://github.com/tj/node-migrate) was forgot in time, with many [issues](https://github.com/tj/node-migrate/issues) opened and unsolved, since TJ is no longer envolved with node.js modules. 
@@ -35,6 +35,7 @@ grunt.initConfig({
   migrate: {
     path: 'migrations/',
     adapter: 'MongoDB',
+    initializerPath: '',
     db: {
       host: '127.0.0.1',
       port: 27017,
@@ -81,6 +82,18 @@ You can pass --steps argument to limit the number of migrations to run.
 ```
 $ grunt migrate:down
 ```
+
+### Initializer
+You can define a initializer file which will be loaded before any task. Usefull for things like connect to your database before run your migrations.
+
+Just define your initializer path inside your Gruntfile:
+
+```js
+grunt.initConfig({
+  migrate: {
+    initializerPath: 'config/migrate',
+  }
+});
 
 ## The library does not support my database!
 Fear nothing, It's pretty simple to implement a new adapter, just follow the [existing mongodb adapter](https://github.com/ericsaboia/grunt-migrate/blob/master/tasks/lib/adapters/mongodb.js) methods.
