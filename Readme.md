@@ -105,7 +105,7 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 
 ## Release History
 
-**0.1.0 / 2014-12-22**
+**0.1.1 / 2014-12-22**
 
  * Used grunt for the CLI
  * Used database for store migrate histories

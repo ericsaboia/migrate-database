@@ -1,0 +1,107 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node', '/usr/local/bin/npm', 'publish' ]
+2 info using npm@2.1.16
+3 info using node@v0.10.20
+4 verbose publish [ '.' ]
+5 silly cache add args [ '.', null ]
+6 verbose cache add spec .
+7 silly cache add parsed spec { raw: '.',
+7 silly cache add   scope: null,
+7 silly cache add   name: null,
+7 silly cache add   rawSpec: '.',
+7 silly cache add   spec: '/home/ericsaboia/projects/node/webeer/tmp/grunt-migrate',
+7 silly cache add   type: 'directory' }
+8 verbose tar pack [ '/home/ericsaboia/.npm/migrate-database/0.1.0/package.tgz',
+8 verbose tar pack   '/home/ericsaboia/projects/node/webeer/tmp/grunt-migrate' ]
+9 verbose tarball /home/ericsaboia/.npm/migrate-database/0.1.0/package.tgz
+10 verbose folder /home/ericsaboia/projects/node/webeer/tmp/grunt-migrate
+11 info prepublish migrate-database@0.1.0
+12 verbose addLocalTarball adding from inside cache /home/ericsaboia/.npm/migrate-database/0.1.0/package.tgz
+13 silly cache afterAdd migrate-database@0.1.0
+14 verbose afterAdd /home/ericsaboia/.npm/migrate-database/0.1.0/package/package.json not in flight; writing
+15 verbose afterAdd /home/ericsaboia/.npm/migrate-database/0.1.0/package/package.json written
+16 silly publish { name: 'migrate-database',
+16 silly publish   description: 'A grunt task for database migration in Node.JS',
+16 silly publish   version: '0.1.0',
+16 silly publish   homepage: 'https://github.com/ericsaboia/migrate-database',
+16 silly publish   author:
+16 silly publish    { name: 'Eric Saboia',
+16 silly publish      email: 'esaboia@gmail.com',
+16 silly publish      url: 'http://failfast.tips' },
+16 silly publish   repository:
+16 silly publish    { type: 'git',
+16 silly publish      url: 'git://github.com:ericsaboia/migrate-database.git' },
+16 silly publish   bugs: { url: 'https://github.com/ericsaboia/migrate-database/issues' },
+16 silly publish   licenses:
+16 silly publish    [ { type: 'MIT',
+16 silly publish        url: 'https://github.com/ericsaboia/migrate-database/blob/master/LICENSE-MIT' } ],
+16 silly publish   engines: { node: '>= 0.8.0' },
+16 silly publish   scripts: { test: 'grunt test' },
+16 silly publish   peerDependencies: { grunt: '~0.4.5' },
+16 silly publish   keywords: [ 'gruntplugin', 'migrate', 'migration', 'database' ],
+16 silly publish   dependencies:
+16 silly publish    { async: '^0.9.0',
+16 silly publish      lodash: '^2.4.1',
+16 silly publish      'promised-mongo': '^0.11.1' },
+16 silly publish   readme: '# migrate-database\n\nA grunt task for database migration in Node.JS\nIt has started as a fork of [node-migrate](https://github.com/tj/node-migrate), but has rebuilt from scratch, and it\'s heavily inspired on Rails migrations style. \n\n# Why grunt-migrate?\n1. Because the [currently most popular node migrate library](https://github.com/tj/node-migrate) was forgot in time, with many [issues](https://github.com/tj/node-migrate/issues) opened and unsolved, since TJ is no longer envolved with node.js modules. \n2. It uses grunt for the CLI, which is far better than inject bins inside npm node modules.\n3. It uses yours database to store migrate histories, avoiding a bunch of possible issues\n4. It uses timestamp in migration\'s name, good bye merge pain.\n5. It was designed to plug any database through adapters.\n\n## Getting Started\nThis plugin requires Grunt `~0.4.5`\n\nIf you haven\'t used [Grunt](http://gruntjs.com/) before, be sure to check out the [Getting Started](http://gruntjs.com/getting-started) guide, as it explains how to create a [Gruntfile](http://gruntjs.com/sample-gruntfile) as well as install and use Grunt plugins. Once you\'re familiar with that process, you may install this plugin with this command:\n\n```shell\nnpm install grunt-migrate --save-dev\n```\n\nOnce the plugin has been installed, it may be enabled inside your Gruntfile with this line of JavaScript:\n\n```js\ngrunt.loadNpmTasks(\'grunt-migrate\');\n```\n\n## The "migrate" task\n\n### Overview\nIn your project\'s Gruntfile, add a section named `migrate` to the data object passed into `grunt.initConfig()`.\n\n```js\ngrunt.initConfig({\n  migrate: {\n    path: \'migrations/\',\n    adapter: \'MongoDB\',\n    initializerPath: \'\',\n    db: {\n      host: \'127.0.0.1\',\n      port: 27017,\n      database: \'migrate\',\n      collection: \'schema_migrations\'\n    }\n  }\n});\n```\n\n## Usage\n\n### Creating migrations\nCreates a new migration inside the migrate.path destination\n\n```shell\n$ grunt migrate:create --name migrations_name\n```\n\nThe created migration will contain the following template structure:\n\n```js\nexports.up = function (next) {\n  next(new Error(\'Not implemented\'));\n};\n\nexports.down = function (next) {\n  next(new Error(\'Not implemented\'));\n};\n```\n\n### Running migrations up\nRuns all the pending migrations. \nYou can pass the --steps argument to limit the number of migrations to run.\n\n```shell\n$ grunt migrate:up\n```\n\n### Running migrations down\nRollbacks the last migration\nYou can pass --steps argument to limit the number of migrations to run.\n\n```\n$ grunt migrate:down\n```\n\n### Initializer\nYou can define a initializer file which will be loaded before any task. Usefull for things like connect to your database before run your migrations.\n\nJust define your initializer path inside your Gruntfile:\n\n```js\ngrunt.initConfig({\n  migrate: {\n    initializerPath: \'config/migrate\'\n  }\n});\n```\n\n## The library does not support my database!\nFear nothing, It\'s pretty simple to implement a new adapter, just follow the [existing mongodb adapter](https://github.com/ericsaboia/grunt-migrate/blob/master/tasks/lib/adapters/mongodb.js) methods.\nFeel free to create a new adapter and pull-request it.\n\n## Contributing\nIn lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).\n\n## Release History\n\n**0.1.0 / 2014-12-22**\n\n * Used grunt for the CLI\n * Used database for store migrate histories\n * Used timestamp for migrations name\n * Fixed error handler\n * Cloned node-migrate\n\n## License \n\n(The MIT License)\n\nCopyright (c) 2014 Eric Saboia esaboia@gmal.com\n\nPermission is hereby granted, free of charge, to any person obtaining\na copy of this software and associated documentation files (the\n\'Software\'), to deal in the Software without restriction, including\nwithout limitation the rights to use, copy, modify, merge, publish,\ndistribute, sublicense, and/or sell copies of the Software, and to\npermit persons to whom the Software is furnished to do so, subject to\nthe following conditions:\n\nThe above copyright notice and this permission notice shall be\nincluded in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \'AS IS\', WITHOUT WARRANTY OF ANY KIND,\nEXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF\nMERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.\nIN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY\nCLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,\nTORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE\nSOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n',
+16 silly publish   readmeFilename: 'Readme.md',
+16 silly publish   gitHead: 'e70f3bd19c0b32baa95fa921c3a6fea7bbb49210',
+16 silly publish   _id: 'migrate-database@0.1.0',
+16 silly publish   _shasum: '6ba967b4741b308a4fe03c2a62027f60b3e85104',
+16 silly publish   _from: '.' }
+17 silly mapToRegistry name migrate-database
+18 silly mapToRegistry using default registry
+19 silly mapToRegistry registry https://registry.npmjs.org/
+20 silly mapToRegistry uri https://registry.npmjs.org/migrate-database
+21 verbose publish registryBase https://registry.npmjs.org/
+22 silly publish uploading /home/ericsaboia/.npm/migrate-database/0.1.0/package.tgz
+23 verbose request uri https://registry.npmjs.org/migrate-database
+24 verbose request sending authorization for write operation
+25 info attempt registry request try #1 at 21:11:33
+26 verbose request id 9a3800ecdde6d0d0
+27 http request PUT https://registry.npmjs.org/migrate-database
+28 http 403 https://registry.npmjs.org/migrate-database
+29 verbose headers { date: 'Thu, 25 Dec 2014 23:11:36 GMT',
+29 verbose headers   server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+29 verbose headers   'content-type': 'application/json',
+29 verbose headers   'cache-control': 'max-age=60',
+29 verbose headers   'content-length': '230',
+29 verbose headers   'accept-ranges': 'bytes',
+29 verbose headers   via: '1.1 varnish',
+29 verbose headers   'x-served-by': 'cache-atl6226-ATL',
+29 verbose headers   'x-cache': 'MISS',
+29 verbose headers   'x-cache-hits': '0',
+29 verbose headers   'x-timer': 'S1419549095.738097,VS0,VE348',
+29 verbose headers   'keep-alive': 'timeout=10, max=50',
+29 verbose headers   connection: 'Keep-Alive' }
+30 verbose request invalidating /home/ericsaboia/.npm/registry.npmjs.org/migrate-database on PUT
+31 error publish Failed PUT 403
+32 verbose stack Error: forbidden Attempting to modify version 0.1.0,
+32 verbose stack which was previously published on 2014-12-25T23:07:22.321Z.
+32 verbose stack This is forbidden, to maintain package integrity.
+32 verbose stack Please update the version number and try again.: migrate-database
+32 verbose stack     at CachingRegistryClient.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:244:14)
+32 verbose stack     at Request._callback (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:172:14)
+32 verbose stack     at Request.self.callback (/usr/local/lib/node_modules/npm/node_modules/request/request.js:373:22)
+32 verbose stack     at Request.EventEmitter.emit (events.js:98:17)
+32 verbose stack     at Request.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/request/request.js:1318:14)
+32 verbose stack     at Request.EventEmitter.emit (events.js:117:20)
+32 verbose stack     at IncomingMessage.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/request/request.js:1266:12)
+32 verbose stack     at IncomingMessage.EventEmitter.emit (events.js:117:20)
+32 verbose stack     at _stream_readable.js:920:16
+32 verbose stack     at process._tickCallback (node.js:415:13)
+33 verbose statusCode 403
+34 verbose pkgid migrate-database
+35 verbose cwd /home/ericsaboia/projects/node/webeer/tmp/grunt-migrate
+36 error Linux 3.11.0-26-generic
+37 error argv "node" "/usr/local/bin/npm" "publish"
+38 error node v0.10.20
+39 error npm  v2.1.16
+40 error code E403
+41 error forbidden Attempting to modify version 0.1.0,
+41 error which was previously published on 2014-12-25T23:07:22.321Z.
+41 error This is forbidden, to maintain package integrity.
+41 error Please update the version number and try again.: migrate-database
+42 error If you need help, you may report this error at:
+42 error     <http://github.com/npm/npm/issues>
+43 verbose exit [ 1, true ]
