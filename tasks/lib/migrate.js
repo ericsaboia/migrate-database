@@ -1,5 +1,5 @@
 /*
- * grunt-migrate
+ * migrate-database
  * https://github.com/ericsaboia/migrate-database
  *
  * Copyright (c) 2014 Eric Saboia

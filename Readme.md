@@ -1,4 +1,4 @@
-# grunt-migrate
+# migrate-database
 
 A grunt task for database migration in Node.JS
 It has started as a fork of [node-migrate](https://github.com/tj/node-migrate), but has rebuilt from scratch, and it's heavily inspired on Rails migrations style. 
