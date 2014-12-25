@@ -25,27 +25,38 @@ var defaultConfig = {
 
 module.exports = function(grunt) {
   var config = _.merge(defaultConfig, grunt.config.data.migrate);
-  var migrationsPath = path.resolve(config.path);
 
-	var Adapter = require('./lib/adapters/' + config.adapter);
+	var Adapter = require('./lib/adapters/' + config.adapter.toLowerCase());
 	var adapter = new Adapter(config.db);
 
   grunt.registerTask('migrate:create', 'creates a new migration', function(command) {
     if (!grunt.option('name'))
       throw new Error('--name required to create migration');
 
-    var migrate = new Migrate(grunt, adapter, migrationsPath, grunt.option('steps'));
-    migrate.create(grunt.option('name'), this.async());
+    var migrate = new Migrate(grunt, adapter, config, grunt.option('steps'));
+    migrate.create(grunt.option('name'), handlerErros(this.async()));
   });
 
   grunt.registerTask('migrate:up', 'executes all or limited new migrations\nUse --steps to control how many migrations would be executed', function(command) {
-    var migrate = new Migrate(grunt, adapter, migrationsPath, grunt.option('steps'));
-    migrate.up(this.async());
+    var migrate = new Migrate(grunt, adapter, config, grunt.option('steps'));
+    migrate.up(handlerErros(this.async()));
   });
 
   grunt.registerTask('migrate:down', 'rollbacks one or more migrations\nUse --steps to control how many migrations would rollback', function(command) {  	
-    var migrate = new Migrate(grunt, adapter, migrationsPath, grunt.option('steps') || 1);
-    migrate.down(this.async());
+    var migrate = new Migrate(grunt, adapter, config, grunt.option('steps') || 1);
+    migrate.down(handlerErros(this.async()));
   });
+
+  /**
+   * Only an Error instance or false are treated as failed task on Grunt
+   * So we need to instance a Error for every non false error returned.
+   */
+
+  function handlerErros (done) {
+    return function (err) {
+      if (err) err = new Error(err);
+      done(err);
+    }
+  }
 
 };
