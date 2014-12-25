@@ -3,7 +3,7 @@
 A grunt task for database migration in Node.JS
 It has started as a fork of [node-migrate](https://github.com/tj/node-migrate), but has rebuilt from scratch, and it's heavily inspired on Rails migrations style. 
 
-# Why grunt-migrate?
+# Why migrate-database?
 1. Because the [currently most popular node migrate library](https://github.com/tj/node-migrate) was forgot in time, with many [issues](https://github.com/tj/node-migrate/issues) opened and unsolved, since TJ is no longer envolved with node.js modules. 
 2. It uses grunt for the CLI, which is far better than inject bins inside npm node modules.
 3. It uses yours database to store migrate histories, avoiding a bunch of possible issues
