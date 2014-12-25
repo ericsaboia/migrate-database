@@ -33,10 +33,6 @@ module.exports = Migrate;
  */
 
 function Migrate (grunt, adapter, config, steps) {
-  // Load initializer
-  if (config.initializerPath)
-    require( path.resolve(config.initializerPath) );
-
   this.grunt = grunt;
   this.adapter = adapter;
   this.path = path.resolve(config.path);
@@ -72,6 +68,8 @@ Migrate.prototype.create = function (name, callback) {
  */
 
 Migrate.prototype.down = function(callback) {
+  if (!this.steps) this.steps = 1;
+
   var that = this;
   that.adapter.list('down', function (err, migrated) {
     that.go('down', migrated, callback);

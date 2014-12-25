@@ -26,24 +26,29 @@ var defaultConfig = {
 module.exports = function(grunt) {
   var config = _.merge(defaultConfig, grunt.config.data.migrate);
 
+  // Load initializer
+  if (config.initializerPath)
+    require( path.resolve(config.initializerPath) );
+
+  // Create an Adapter instance
 	var Adapter = require('./lib/adapters/' + config.adapter.toLowerCase());
 	var adapter = new Adapter(config.db);
+
+  // Create a Migrate instance
+  var migrate = new Migrate(grunt, adapter, config, grunt.option('steps'));
 
   grunt.registerTask('migrate:create', 'creates a new migration', function(command) {
     if (!grunt.option('name'))
       throw new Error('--name required to create migration');
 
-    var migrate = new Migrate(grunt, adapter, config, grunt.option('steps'));
     migrate.create(grunt.option('name'), handlerErros(this.async()));
   });
 
   grunt.registerTask('migrate:up', 'executes all or limited new migrations\nUse --steps to control how many migrations would be executed', function(command) {
-    var migrate = new Migrate(grunt, adapter, config, grunt.option('steps'));
     migrate.up(handlerErros(this.async()));
   });
 
   grunt.registerTask('migrate:down', 'rollbacks one or more migrations\nUse --steps to control how many migrations would rollback', function(command) {  	
-    var migrate = new Migrate(grunt, adapter, config, grunt.option('steps') || 1);
     migrate.down(handlerErros(this.async()));
   });
 
