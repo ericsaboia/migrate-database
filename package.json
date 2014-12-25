@@ -27,9 +27,6 @@
   "scripts": {
     "test": "grunt test"
   },
-  "devDependencies": {
-    "grunt": "^0.4.5",
-  },
   "peerDependencies": {
     "grunt": "~0.4.5"
   },
