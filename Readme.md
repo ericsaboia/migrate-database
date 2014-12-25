@@ -91,9 +91,10 @@ Just define your initializer path inside your Gruntfile:
 ```js
 grunt.initConfig({
   migrate: {
-    initializerPath: 'config/migrate',
+    initializerPath: 'config/migrate'
   }
 });
+```
 
 ## The library does not support my database!
 Fear nothing, It's pretty simple to implement a new adapter, just follow the [existing mongodb adapter](https://github.com/ericsaboia/grunt-migrate/blob/master/tasks/lib/adapters/mongodb.js) methods.
